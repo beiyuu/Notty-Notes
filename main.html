@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Notty Notes</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.6.custom.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/animate-custom.css" />
+	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/underscore.js"></script>
+	<script src="js/backbone.js"></script>
+	<script src="js/backbone.localStorage.js"></script>
+	<script src="js/jquery-ui-1.8.14.custom.min.js"></script>
+	<script src="js/sanitize.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
+</head>
+
+<body id="container">
+    <div class="note-tmpl" id="note-template">
+        <!--<div class="note">-->
+            <div class="note-nav">
+                <i class="note-nav-lock note-lock" title="Click To Unlock"></i>
+                <i class="note-nav-lock note-unlock" title="Click To lock"></i>
+                <span class="note-nav-title" title="Click To Change">{{=title}}</span>
+                <i class="note-nav-close icon-remove" title="Remove"></i>
+            </div>
+            <div class="note-content" contenteditable>{{=content}}
+            </div>
+        <!--</div>-->
+    </div>
+    <div class="modal hide fade" id="modal-settings">
+        <!--<div class="modal-header">-->
+            <!--<h3>Settings</h3>-->
+        <!--</div>-->
+        <div class="modal-body">
+            <div class="modify-title-theme">
+                <h2 class="modal-h2">Title</h2>
+                <div>
+                <input id="modal-title" name="" type="text" value=""/>
+                </div>
+                <h2 class="modal-h2">Background</h2>
+                <div class="modify-theme note-theme0" data-themeid="0"></div>
+                <div class="modify-theme note-theme1" data-themeid="1"></div>
+                <div class="modify-theme note-theme2" data-themeid="2"></div>
+                <div class="modify-theme note-theme3" data-themeid="3"></div>
+                <div class="modify-theme note-theme4" data-themeid="4"></div>
+                <div class="modify-theme note-theme5" data-themeid="5"></div>
+                <div class="modify-theme note-theme6" data-themeid="6"></div>
+                <div class="modify-theme note-theme7" data-themeid="7"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" id="modal-cancel-btn">Close</a>
+            <a href="#" class="btn btn-primary" id="modal-save-btn">Save</a>
+        </div>
+    </div>
+    <div id="tmpl-close" class="hide">
+        <div class="alert fade in tmpl-close-confirm">
+            <div class="tmpl-close-title">Really to remove?</div>
+            <div>
+                <input type="button" value="Cancel" class="btn" id="btn-close-cancel"/>
+                <input type="button" value="Remove" class="btn btn-info" id="btn-close-confirm"/>
+            </div>
+            <div class="tmpl-close-hide">
+                <input id="tmpl-close-txt" name="" type="text"/>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
