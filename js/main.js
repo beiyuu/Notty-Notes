@@ -21,6 +21,8 @@ $(function(){
             position:{top:20,left:30}
             ,scale:{width:300,height:300}
             ,theme:'0'
+            ,fonttheme:'1'
+            ,customfont:'16'
             ,title:'Note'
             ,content:''
             ,collapsed:''
@@ -30,7 +32,6 @@ $(function(){
         }
 
         ,initialize:function(){
-            var that = this;
             this.bind('change',function(){
                 this.save()
             });
@@ -73,9 +74,29 @@ $(function(){
                 $ele.find('.note-nav-title').text(model.get('title'));
             });
             model.bind('change:theme',function(){
-                $ele.removeClass('note-theme0 note-theme1 note-theme2 note-theme3 note-theme4 note-theme5 note-theme6');
+                $ele.removeClass('note-theme0 note-theme1 note-theme2 note-theme3 note-theme4 note-theme5 note-theme6 note-theme7');
                 $ele.addClass('note-theme'+model.get('theme'));
             });
+            model.bind('change:fonttheme',function(){
+                $ele.find('.note-content').removeClass('font-theme0 font-theme1 font-theme2 font-theme3');
+                $ele.find('.note-content').addClass('font-theme'+model.get('fonttheme'));
+                if(model.get('fonttheme') == '4'){
+                    var fontsize = model.get('customfont');
+                    $ele.find('.note-content').css({'font-size':fontsize+'px'});
+                }else{
+                    $ele.find('.note-content').css({'font-size':''});
+                }
+            });
+            model.bind('change:customfont',function(){
+                $ele.find('.note-content').removeClass('font-theme0 font-theme1 font-theme2 font-theme3');
+                $ele.find('.note-content').addClass('font-theme'+model.get('fonttheme'));
+                if(model.get('fonttheme') == '4'){
+                    var fontsize = model.get('customfont');
+                    $ele.find('.note-content').css({'font-size':fontsize+'px'});
+                }else{
+                    $ele.find('.note-content').css({'font-size':''});
+                }
+            })
 
             $ele.html(
                 this.template('#note-template',model.toJSON())
@@ -115,6 +136,12 @@ $(function(){
                 $ele.addClass('note-theme'+theme)
             }
 
+            var fontTheme = model.get('fonttheme');
+            $ele.find('.note-content').addClass('font-theme'+fontTheme);
+            if(fontTheme == '4'){
+                $ele.find('.note-content').css({"font-size":model.get('customfont')+'px'});
+            }
+
             var locked = model.get('locked');
             if(locked){
                 $ele.addClass('locked')
@@ -132,24 +159,27 @@ $(function(){
             ,'keyup .note-content':'contentChange'
             ,'blur .note-content':'contentChange'
         }
-        ,foldContent:function(){
+        ,foldContent:function(e){
             var $ele = $(this.el);
+            var target = $ele.find('.note-nav')[0];
 
-            if(this.model.get('collapsed')){
-                var height = $ele.attr('data-height') || this.model.get('scale').height;
-                $ele.attr('data-height','');
+            if(e.target == target){
+                if(this.model.get('collapsed')){
+                    var height = $ele.attr('data-height') || this.model.get('scale').height;
+                    $ele.attr('data-height','');
 
-                $ele.removeClass('content-collapse')
-                $ele.animate({height:height},'fast')
+                    $ele.removeClass('content-collapse')
+                    $ele.animate({height:height},'fast')
 
-                this.model.set({collapsed:''});
-            }else{
-                $ele.attr('data-height',$ele.height())
-                $ele.animate({height:COLLAPSED_HEIGHT},'fast',function(){
-                    $ele.addClass('content-collapse')
-                })
+                    this.model.set({collapsed:''});
+                }else{
+                    $ele.attr('data-height',$ele.height())
+                    $ele.animate({height:COLLAPSED_HEIGHT},'fast',function(){
+                        $ele.addClass('content-collapse')
+                    })
 
-                this.model.set({collapsed:'content-collapse'});
+                    this.model.set({collapsed:'content-collapse'});
+                }
             }
         }
         ,clickNote:function(e){
@@ -182,6 +212,7 @@ $(function(){
                         top:top-20
                         ,left:left-200
                     })
+                    .unbind()
                     .fadeIn('fast')
                     .delegate('#btn-close-cancel','click',function(){
                         $('#tmpl-close').unbind().fadeOut('fast');
@@ -200,8 +231,6 @@ $(function(){
             }
 
             $('#tmpl-close-txt').focus();
-            /*
-            */
         }
         ,lockNote:function(e){
             var locked = this.model.get('locked');
@@ -221,21 +250,31 @@ $(function(){
                 var title = this.model.get('title');
                 var $setting = $('#modal-settings');
                 $('#modal-title').val(title);
-                $setting.modal('show')
+                $setting.modal({height:800}).modal('show')
                     .on('shown',function(){
                         $('#modal-title').select();
                         var themeid = that.model.get('theme');
+                        var fontTheme = that.model.get('fonttheme');
                         $setting.attr({
                             'data-themeid':themeid
                             ,'data-title':that.model.get('title')
+                            ,'data-fonttheme':fontTheme
                         });
                         $setting.find('.note-theme'+themeid).addClass('modal-theme-selected');
+                        $setting.find('.font-theme'+fontTheme).addClass('font-theme-selected');
+                        if(fontTheme == '4'){
+                            $('#modal-set-font').show().val(that.model.get('customfont'));
+                        }
                     })
                     .on('hidden',function(){
                         $setting.unbind();
                         $('.modify-theme').removeClass('modal-theme-selected');
+                        $('.modal-font-size li').removeClass('font-theme-selected');
+                        $('#modal-set-font').hide();
                         that.model.set({title:$setting.attr('data-title')});
                         that.model.set({theme:$setting.attr('data-themeid')});
+                        that.model.set({fonttheme:$setting.attr('data-fonttheme')});
+                        that.model.set({customfont:$setting.attr('data-customfont')});
                     })
                     .delegate('#modal-save-btn','click',function(e){
                         e.preventDefault();
@@ -243,8 +282,18 @@ $(function(){
                         if(title){
                             $setting.attr('data-title',title);
                             var id = $setting.find('.modal-theme-selected').attr('data-themeid');
-                            $setting.attr('data-themeid',id)
-                            $setting.modal('hide');
+                            var font = $setting.find('.font-theme-selected').attr('data-fonttheme');
+                            var customfont = $('#modal-set-font').val();
+                            if(font == '4' && customfont){
+                                $setting.attr('data-customfont',customfont);
+                                $setting.attr('data-themeid',id);
+                                $setting.attr('data-fonttheme',font);
+                                $setting.modal('hide');
+                            }if(font != '4'){
+                                $setting.attr('data-themeid',id);
+                                $setting.attr('data-fonttheme',font);
+                                $setting.modal('hide');
+                            }
                         }
                     })
                     .delegate('#modal-title','keyup',function(e){
@@ -259,6 +308,23 @@ $(function(){
                     .delegate('.modify-theme','click',function(){
                         $('.modify-theme').removeClass('modal-theme-selected');
                         $(this).addClass('modal-theme-selected');
+                    })
+                    .delegate('.modal-font-size li','click',function(){
+                        $('#modal-set-font').hide();
+                        $('.modal-font-size li').removeClass('font-theme-selected');
+                        $(this).addClass('font-theme-selected');
+                    })
+                    .delegate('#font-theme-custom','click',function(){
+                        var customfont = that.model.get('customfont');
+                        $('#modal-set-font').show().val(customfont).select();
+                    })
+                    .delegate('#modal-set-font','keydown',function(e){
+                        if(e.keyCode == 13){
+                            $('#modal-save-btn').trigger('click');
+                        }
+                        if((e.keyCode<48 || e.keyCode>57) && e.keyCode != 8){
+                            e.preventDefault();
+                        }
                     })
             }
         }
@@ -363,6 +429,6 @@ $(function(){
         }
     }
     if(!checkForNotify('first_run')){
-        Notes.create({position:{top:100,left:300},scale:{width:400,height:300},title:'Read Me',content:'Double click on the background to add new notes.<div><br></div><div>Click the note title to change it and set the single note\'s background.</div><div><br></div><div>Click the lock icon to prevent the note from changing and deleting.</div>'});
+        Notes.create({position:{top:100,left:300},scale:{width:400,height:300},title:'Read Me',content:'Double click on the background to add new notes.<div><br></div><div>Click on the note title to change it and set up the single note\'s background.</div><div><br></div><div>Click on the lock icon to prevent the note from changing and deleting.</div>'});
     }
 });

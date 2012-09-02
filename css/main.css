@@ -82,7 +82,8 @@ body{ background:#ccc; }
 .locked .note-nav-title{cursor:move;}
 .locked .note-nav-close{opacity:0.1;}
 
-.modify-title-theme{}
+#modal-settings .modal-body{max-height:600px;}
+.modal-h2{font-size:18px;font-weight:bold;margin-bottom:10px;}
 #modal-title{width:330px;margin-left:22px;height:25px;font-size:15px;}
 .modify-theme{
     width:80px;
@@ -102,7 +103,35 @@ body{ background:#ccc; }
         ,inset -1px -1px 0 rgba(0, 0, 0, 0.45)
         , 0 4px 15px rgba(0, 0, 0, 0.45);
 }
-.modal-h2{font-size:18px;font-weight:bold;margin-bottom:10px;}
+.modal-font-size{margin-left:22px;}
+.modal-font-size li{
+    display:inline-block;
+    width:50px;
+    height:50px;
+    margin-right:30px;
+    background:#eee;
+    text-align:center;
+    line-height:50px;
+    vertical-align:middle;
+    cursor:pointer;
+    opacity:0.7;
+    -webkit-transition: box-shadow 0.1s ease-in-out;
+    box-shadow:inset 1px 1px 0 rgba(0, 0, 0, 0.45) 
+        ,inset -1px -1px 0 rgba(0, 0, 0, 0.45)
+        , 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+.modal-font-size .font-theme-selected{
+    opacity:1;
+    box-shadow:inset 1px 6px 0 rgba(255, 59, 33, 0.45) 
+        ,inset -1px -1px 0 rgba(0, 0, 0, 0.45)
+        , 0 4px 15px rgba(0, 0, 0, 0.45);
+}
+.font-theme0{font-size:12px;}
+.font-theme1{font-size:16px;}
+.font-theme2{font-size:20px;}
+.font-theme3{font-size:26px;}
+.font-theme4{font-size:26px;}
+#modal-set-font{margin-left:-15px;width:40px;display:none;margin-bottom:0;vertical-align:bottom;}
 
 #tmpl-close{position:absolute;z-index:9999;width:190px;}
 .tmpl-close-confirm{
