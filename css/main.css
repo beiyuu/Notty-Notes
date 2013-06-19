@@ -141,8 +141,8 @@ body{ background:#ccc; }
 .tmpl-close-title{margin-bottom:10px;font-size:16px;}
 .tmpl-close-hide{width:0;height:0;overflow:hidden;}
 
-.notty-info {position:fixed;bottom:15px;right:5px;}
-.notty-info a{font-size:18px;background:rgba(0,0,0,0.2);padding:10px;color:#999;border-radius:5px;}
+.notty-info {position:fixed;bottom:12px;right:5px;}
+.notty-info a{font-size:18px;background:rgba(0,0,0,0.15);padding:10px;color:#888;border-radius:5px;}
 .notty-info a:hover {background:rgba(0,0,0,0.3);text-decoration:none;color:#ccc;}
 
 #modal-notty-info { background:#ececec; padding:30px 30px; width:490px; margin-left:-245px; }
