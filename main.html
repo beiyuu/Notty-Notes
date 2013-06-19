@@ -2,20 +2,21 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Notty Notes</title>
-	<link rel="stylesheet" type="text/css" href="css/reset.css" />
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.6.custom.css" />
-	<link rel="stylesheet" type="text/css" href="css/main.css" />
-	<link rel="stylesheet" type="text/css" href="css/animate-custom.css" />
-	<script src="js/jquery-1.7.1.min.js"></script>
-	<script src="js/underscore.js"></script>
-	<script src="js/backbone.js"></script>
-	<script src="js/backbone.localStorage.js"></script>
-	<script src="js/jquery-ui-1.8.14.custom.min.js"></script>
-	<script src="js/sanitize.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/main.js"></script>
+    <title>Notty Notes</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.6.custom.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/animate-custom.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-icon.css" />
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/backbone.js"></script>
+    <script src="js/backbone.localStorage.js"></script>
+    <script src="js/jquery-ui-1.8.14.custom.min.js"></script>
+    <script src="js/sanitize.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
 </head>
 
 <body id="container">
@@ -51,11 +52,11 @@
 
             <h2 class="modal-h2">Font Size</h2>
             <ul class="modal-font-size">
-            	<li class="font-theme0" data-fonttheme="0">12</li>
-            	<li class="font-theme1" data-fonttheme="1">16</li>
-            	<li class="font-theme2" data-fonttheme="2">20</li>
-            	<li class="font-theme3" data-fonttheme="3">26</li>
-            	<li id="font-theme-custom" class="font-theme4" data-fonttheme="4">?</li>
+                <li class="font-theme0" data-fonttheme="0">12</li>
+                <li class="font-theme1" data-fonttheme="1">16</li>
+                <li class="font-theme2" data-fonttheme="2">20</li>
+                <li class="font-theme3" data-fonttheme="3">26</li>
+                <li id="font-theme-custom" class="font-theme4" data-fonttheme="4">?</li>
                 <input id="modal-set-font" name="" type="text" value="" type="number" maxlength="2"/>
             </ul>
         </div>
@@ -73,6 +74,44 @@
             </div>
             <div class="tmpl-close-hide">
                 <input id="tmpl-close-txt" name="" type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="notty-info">
+        <a href="#" class="ficon-plus" id="btn-add-note"></a>
+        <a href="#" class="ficon-question" id="btn-notty-info"></a>
+    </div>
+    <div class="modal hide fade" id="modal-notty-info">
+        <!--<div class="modal-header">-->
+            <!--<h3>Settings</h3>-->
+        <!--</div>-->
+        <div class="modal-body">
+            <h2 class="modal-h2">Usage</h2>
+            <ul class="modal-notty-usage">
+                <li>Double click on background to add a new note</li>
+                <li>Click the note's title to setup it</li>
+                <li>Lock the note to prevent it form changing or deleting </li>
+                <li><a href="https://chrome.google.com/webstore/support/ggbmjahbkbhakkfgjiggdclpmmpmhajn#bug" target="_blank">Feedback</a></li>
+            </ul>
+
+            <h2 class="modal-h2">Share</h2>
+            <div class="options-section">
+                <ul class="share">
+                    <li><a href="http://twitter.com/share?text=Recommend%20the%20great%20chrome%20sticky%20notes%20extension,%20Notty%20Notes%20&url=http://bit.ly/12Uc6zC" target="_blank"><img src="assets/twitter.png" /></a></li>
+                    <li><a href="http://www.facebook.com/sharer.php?u=http://bit.ly/12Uc6zC" target="_blank"><img src="assets/facebook.png" /></a></li>
+                    <li>
+                    <a href="http://service.weibo.com/share/share.php?&url=http%3A%2F%2Fchrome.google.com%2Fwebstore%2Fdetail%2Fnotty-notes%2Fggbmjahbkbhakkfgjiggdclpmmpmhajn&content=utf-8&title=%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E6%9E%81%E5%A5%BD%E7%9A%84Chrome%E4%BE%BF%E7%AD%BE%E6%8F%92%E4%BB%B6%EF%BC%8CNotty%20Notes%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%AE%9E%E6%97%B6%E4%BF%9D%E5%AD%98%EF%BC%8C%E7%A6%BB%E7%BA%BF%E4%BD%BF%E7%94%A8%EF%BC%8C%E7%AE%80%E6%B4%81%E7%BE%8E%E8%A7%82%E3%80%82" target="_blank"><img src="assets/weibo.png" /></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="options-donate">
+                <form name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="dewreg@gmail.com">
+                    <input type="hidden" name="item_name" value="Notty Donation">
+                    <input type="hidden" name="currency_code" value="USD">
+                    <input type="image" src="assets/donate.gif" border="0" name="submit">
+                </form>
             </div>
         </div>
     </div>

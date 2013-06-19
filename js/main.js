@@ -1,11 +1,14 @@
 $(function(){
     var sanitize = new Sanitize({
         elements : [
-            'a','b','blockquote','br','cite','dd','div','dl','dt','em','i','img','li','ol','q','small','strike','strong','sub','sup','u','ul'
+            'a','b','blockquote','br','cite'
+            ,'dd','div','dl','dt','em','i','img'
+            ,'li','ol','q','small','strike'
+            ,'strong','sub','sup','u','ul'
         ]
         ,attributes:{
-            a : ['href'],
-            img : ['src']
+            a : ['href']
+            ,img : ['src']
         }
         ,add_attributes:{
             a : { 'target' : '_blank' }
@@ -412,6 +415,20 @@ $(function(){
         }
     });
 
+    $('#btn-add-note').click(function(e){
+        e.preventDefault();
+
+        var scrollY = window.scrollY;
+        var top = parseInt(Math.random()*300 + scrollY);
+        var left = parseInt(Math.random()*400);
+        Notes.create({position:{top:top,left:left},scale:{width:400,height:300},title:'Note',content:''});
+    })
+
+    $('#btn-notty-info').click(function(e){
+        e.preventDefault();
+        $('#modal-notty-info').modal('show');
+    })
+
     function checkForNotify(item){
         var info = localStorage.getItem('notty-sysinfo');
         if(!info){
@@ -427,8 +444,5 @@ $(function(){
                 return false;
             }
         }
-    }
-    if(!checkForNotify('first_run')){
-        Notes.create({position:{top:100,left:300},scale:{width:400,height:300},title:'Read Me',content:'Double click on the background to add new notes.<div><br></div><div>Click on the note title to change it and set up the single note\'s background.</div><div><br></div><div>Click on the lock icon to prevent the note from changing and deleting.</div>'});
     }
 });
