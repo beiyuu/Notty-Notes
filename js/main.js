@@ -359,8 +359,17 @@ $(function(){
                 oriLeft = right-10
             }
 
-            view.model.set('position',{left:oriLeft,top:oriTop});
-            $ele.animate({left:oriLeft,top:oriTop});
+            //when chrome crashed, after recover the tabs, the pageWidht==0 for the first moment
+            if(pageWidth){
+                view.model.set('position',{left:oriLeft,top:oriTop});
+                $ele.animate({left:oriLeft,top:oriTop});
+            }else{
+                if(oriLeft<10){
+                    oriLeft = 10;
+                    view.model.set('position',{left:oriLeft,top:oriTop});
+                    $ele.animate({left:oriLeft,top:oriTop});
+                }
+            }
         }
         ,bringNoteToFront:function($ele){
             var largestIndex = 1;
@@ -375,8 +384,7 @@ $(function(){
     });
 
     var appView = Backbone.View.extend({
-        el:$('#container')
-        ,initialize:function(){
+        initialize:function(){
             this.collection.bind('add',this.addOne,this);
             this.collection.bind('reset',this.addAll,this);
             Notes.fetch();
