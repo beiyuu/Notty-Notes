@@ -68,20 +68,25 @@ $(function(){
             return template;
         }
         ,initialize:function(){
+            var that = this
+            ,	$ele = $(this.el)
+            ,	model = this.model;
+
             this.bringNoteToFront($(this.el));
-            var that = this;
-            var $ele = $(this.el);
-            var model = this.model;
 
             model.bind('change:title',function(){
                 $ele.find('.note-nav-title').text(model.get('title'));
             });
             model.bind('change:theme',function(){
-                $ele.removeClass('note-theme0 note-theme1 note-theme2 note-theme3 note-theme4 note-theme5 note-theme6 note-theme7');
+				'01234567'.split('').forEach(function(v){
+					$ele.removeClass('note-theme' + v);
+				});
                 $ele.addClass('note-theme'+model.get('theme'));
             });
             model.bind('change:fonttheme',function(){
-                $ele.find('.note-content').removeClass('font-theme0 font-theme1 font-theme2 font-theme3');
+				'01234'.split('').forEach(function(v){
+					$ele.find('.note-content').removeClass('font-theme' + v);
+				});
                 $ele.find('.note-content').addClass('font-theme'+model.get('fonttheme'));
                 if(model.get('fonttheme') == '4'){
                     var fontsize = model.get('customfont');
@@ -91,7 +96,9 @@ $(function(){
                 }
             });
             model.bind('change:customfont',function(){
-                $ele.find('.note-content').removeClass('font-theme0 font-theme1 font-theme2 font-theme3');
+				'01234'.split('').forEach(function(v){
+					$ele.find('.note-content').removeClass('font-theme' + v);
+				});
                 $ele.find('.note-content').addClass('font-theme'+model.get('fonttheme'));
                 if(model.get('fonttheme') == '4'){
                     var fontsize = model.get('customfont');
