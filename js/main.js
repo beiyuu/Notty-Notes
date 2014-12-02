@@ -18,12 +18,12 @@ $(function(){
         }
     });
 
-    var COLLAPSED_HEIGHT = 32;
+    var COLLAPSED_HEIGHT = 46;
     var Note = Backbone.Model.extend({
         defaults:{
             position:{top:20,left:30}
             ,scale:{width:300,height:300}
-            ,theme:'0'
+            ,theme:'3'
             ,fonttheme:'1'
             ,customfont:'16'
             ,title:'Note'
@@ -210,27 +210,39 @@ $(function(){
                     return true;
                 }
 
-                $('#tmpl-close')
-                    .css({
-                        top:top-20
-                        ,left:left-200
-                    })
-                    .unbind()
-                    .fadeIn('fast')
-                    .delegate('#btn-close-cancel','click',function(){
-                        $('#tmpl-close').unbind().fadeOut('fast');
-                    })
-                    .delegate('#btn-close-confirm','click',function(){
-                        $('#tmpl-close').unbind().hide();
-                        del();
-                    })
-                    .delegate('#tmpl-close-txt','keydown',function(e){
-                        if(e.keyCode == 13){
-                            $('#btn-close-confirm').trigger('click')
-                        }else if(e.keyCode == 27){
-                            $('#btn-close-cancel').trigger('click')
-                        }
-                    })
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this note!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: true
+                }, function(){
+                    del();
+                });
+
+//                $('#tmpl-close')
+//                .css({
+//                    top:top-20
+//                    ,left:left-200
+//                })
+//                .unbind()
+//                .fadeIn('fast')
+//                .delegate('#btn-close-cancel','click',function(){
+//                    $('#tmpl-close').unbind().fadeOut('fast');
+//                })
+//                .delegate('#btn-close-confirm','click',function(){
+//                    $('#tmpl-close').unbind().hide();
+//                    del();
+//                })
+//                .delegate('#tmpl-close-txt','keydown',function(e){
+//                    if(e.keyCode == 13){
+//                        $('#btn-close-confirm').trigger('click')
+//                    }else if(e.keyCode == 27){
+//                        $('#btn-close-cancel').trigger('click')
+//                    }
+//                })
             }
 
             $('#tmpl-close-txt').focus();
@@ -254,81 +266,81 @@ $(function(){
                 var $setting = $('#modal-settings');
                 $('#modal-title').val(title);
                 $setting.modal({height:800}).modal('show')
-                    .on('shown',function(){
-                        $('#modal-title').select();
-                        var themeid = that.model.get('theme');
-                        var fontTheme = that.model.get('fonttheme');
-                        $setting.attr({
-                            'data-themeid':themeid
-                            ,'data-title':that.model.get('title')
-                            ,'data-fonttheme':fontTheme
-                        });
-                        $setting.find('.note-theme'+themeid).addClass('modal-theme-selected');
-                        $setting.find('.font-theme'+fontTheme).addClass('font-theme-selected');
-                        if(fontTheme == '4'){
-                            $('#modal-set-font').show().val(that.model.get('customfont'));
+                .on('shown',function(){
+                    $('#modal-title').select();
+                    var themeid = that.model.get('theme');
+                    var fontTheme = that.model.get('fonttheme');
+                    $setting.attr({
+                        'data-themeid':themeid
+                        ,'data-title':that.model.get('title')
+                        ,'data-fonttheme':fontTheme
+                    });
+                    $setting.find('.note-theme'+themeid).addClass('modal-theme-selected');
+                    $setting.find('.font-theme'+fontTheme).addClass('font-theme-selected');
+                    if(fontTheme == '4'){
+                        $('#modal-set-font').show().val(that.model.get('customfont'));
+                    }
+                })
+                .on('hidden',function(){
+                    $setting.unbind();
+                    $('.modify-theme').removeClass('modal-theme-selected');
+                    $('.modal-font-size li').removeClass('font-theme-selected');
+                    $('#modal-set-font').hide();
+                    that.model.set({title:$setting.attr('data-title')});
+                    that.model.set({theme:$setting.attr('data-themeid')});
+                    that.model.set({fonttheme:$setting.attr('data-fonttheme')});
+                    that.model.set({customfont:$setting.attr('data-customfont')});
+                })
+                .delegate('#modal-save-btn','click',function(e){
+                    e.preventDefault();
+                    var  title = $('#modal-title').val();
+                    if(title){
+                        $setting.attr('data-title',title);
+                        var id = $setting.find('.modal-theme-selected').attr('data-themeid');
+                        var font = $setting.find('.font-theme-selected').attr('data-fonttheme');
+                        var customfont = $('#modal-set-font').val();
+                        if(font == '4' && customfont){
+                            $setting.attr('data-customfont',customfont);
+                            $setting.attr('data-themeid',id);
+                            $setting.attr('data-fonttheme',font);
+                            $setting.modal('hide');
+                        }if(font != '4'){
+                            $setting.attr('data-themeid',id);
+                            $setting.attr('data-fonttheme',font);
+                            $setting.modal('hide');
                         }
-                    })
-                    .on('hidden',function(){
-                        $setting.unbind();
-                        $('.modify-theme').removeClass('modal-theme-selected');
-                        $('.modal-font-size li').removeClass('font-theme-selected');
-                        $('#modal-set-font').hide();
-                        that.model.set({title:$setting.attr('data-title')});
-                        that.model.set({theme:$setting.attr('data-themeid')});
-                        that.model.set({fonttheme:$setting.attr('data-fonttheme')});
-                        that.model.set({customfont:$setting.attr('data-customfont')});
-                    })
-                    .delegate('#modal-save-btn','click',function(e){
+                    }
+                })
+                .delegate('#modal-title','keyup',function(e){
+                    if(e.keyCode == 13){
+                        $('#modal-save-btn').trigger('click');
+                    }
+                })
+                .delegate('#modal-cancel-btn','click',function(e){
+                    e.preventDefault();
+                    $setting.modal('hide');
+                })
+                .delegate('.modify-theme','click',function(){
+                    $('.modify-theme').removeClass('modal-theme-selected');
+                    $(this).addClass('modal-theme-selected');
+                })
+                .delegate('.modal-font-size li','click',function(){
+                    $('#modal-set-font').hide();
+                    $('.modal-font-size li').removeClass('font-theme-selected');
+                    $(this).addClass('font-theme-selected');
+                })
+                .delegate('#font-theme-custom','click',function(){
+                    var customfont = that.model.get('customfont');
+                    $('#modal-set-font').show().val(customfont).select();
+                })
+                .delegate('#modal-set-font','keydown',function(e){
+                    if(e.keyCode == 13){
+                        $('#modal-save-btn').trigger('click');
+                    }
+                    if((e.keyCode<48 || e.keyCode>57) && e.keyCode != 8){
                         e.preventDefault();
-                        var  title = $('#modal-title').val();
-                        if(title){
-                            $setting.attr('data-title',title);
-                            var id = $setting.find('.modal-theme-selected').attr('data-themeid');
-                            var font = $setting.find('.font-theme-selected').attr('data-fonttheme');
-                            var customfont = $('#modal-set-font').val();
-                            if(font == '4' && customfont){
-                                $setting.attr('data-customfont',customfont);
-                                $setting.attr('data-themeid',id);
-                                $setting.attr('data-fonttheme',font);
-                                $setting.modal('hide');
-                            }if(font != '4'){
-                                $setting.attr('data-themeid',id);
-                                $setting.attr('data-fonttheme',font);
-                                $setting.modal('hide');
-                            }
-                        }
-                    })
-                    .delegate('#modal-title','keyup',function(e){
-                        if(e.keyCode == 13){
-                            $('#modal-save-btn').trigger('click');
-                        }
-                    })
-                    .delegate('#modal-cancel-btn','click',function(e){
-                        e.preventDefault();
-                        $setting.modal('hide');
-                    })
-                    .delegate('.modify-theme','click',function(){
-                        $('.modify-theme').removeClass('modal-theme-selected');
-                        $(this).addClass('modal-theme-selected');
-                    })
-                    .delegate('.modal-font-size li','click',function(){
-                        $('#modal-set-font').hide();
-                        $('.modal-font-size li').removeClass('font-theme-selected');
-                        $(this).addClass('font-theme-selected');
-                    })
-                    .delegate('#font-theme-custom','click',function(){
-                        var customfont = that.model.get('customfont');
-                        $('#modal-set-font').show().val(customfont).select();
-                    })
-                    .delegate('#modal-set-font','keydown',function(e){
-                        if(e.keyCode == 13){
-                            $('#modal-save-btn').trigger('click');
-                        }
-                        if((e.keyCode<48 || e.keyCode>57) && e.keyCode != 8){
-                            e.preventDefault();
-                        }
-                    })
+                    }
+                })
             }
         }
         ,contentChange:function(e){
@@ -419,7 +431,7 @@ $(function(){
     $(document).bind('dblclick',function(e){
         e.preventDefault();
         if(e.target==$('html')[0]){
-            Notes.create({position:{top:e.pageY,left:e.pageX}});
+            Notes.create({position:{top:e.pageY - 150,left:e.pageX - 150}});
         }
     });
 

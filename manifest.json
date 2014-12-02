@@ -21,5 +21,9 @@
        "unlimitedStorage"
        ,"contextMenus"
        ,"tabs"
-   ]
+   ],
+
+    "background" : {
+        "page": "background/background.html"
+    }
 }
